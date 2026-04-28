@@ -54,8 +54,8 @@ import os, fnmatch
 
 #--- METADATA -----------------------------------------------------------------
 
-name         = "oletools"
-version      = '0.60.3'
+name         = "vtx-oletools"
+version      = '0.60.3+vtx.1'
 desc         = "Python tools to analyze security characteristics of MS Office and OLE files (also called Structured Storage, Compound File Binary Format or Compound Document File Format), for Malware Analysis and Incident Response #DFIR"
 long_desc    = open('oletools/README.rst').read()
 author       = "Philippe Lagadec"
@@ -98,7 +98,6 @@ packages=[
     "oletools.common",
     "oletools.common.log_helper",
     'oletools.thirdparty',
-    'oletools.thirdparty.xxxswf',
     'oletools.thirdparty.prettytable',
     'oletools.thirdparty.xglob',
     'oletools.thirdparty.tablestream',
@@ -179,9 +178,6 @@ package_data={
         + rglob('oletools/doc', 'doc', '*.png'),
 
     'oletools.thirdparty.xglob': [
-        'LICENSE.txt',
-        ],
-    'oletools.thirdparty.xxxswf': [
         'LICENSE.txt',
         ],
     'oletools.thirdparty.prettytable': [
@@ -285,7 +281,6 @@ entry_points = {
         'olemeta=oletools.olemeta:main',
         'oletimes=oletools.oletimes:main',
         'olevba=oletools.olevba:main',
-        'pyxswf=oletools.pyxswf:main',
         'rtfobj=oletools.rtfobj:main',
         'oleobj=oletools.oleobj:main',
         'olefile=olefile.olefile:main',
@@ -330,7 +325,6 @@ def main():
             # msoffcrypto-tool is not installable on PyPy+Windows (see issue #473),
             # so we only require it if the platform is not Windows or not PyPy:
             'msoffcrypto-tool; platform_python_implementation!="PyPy" or (python_version>="3" and platform_system!="Windows" and platform_system!="Darwin")',
-            'pcodedmp>=1.2.5',
         ],
         extras_require={
             # Optional packages - to be installed with pip install -U oletools[full]
