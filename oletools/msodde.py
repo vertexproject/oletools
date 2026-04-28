@@ -47,7 +47,6 @@ http://www.decalage.info/python/oletools
 
 # -- IMPORTS ------------------------------------------------------------------
 
-from __future__ import print_function
 
 import argparse
 import os
@@ -117,11 +116,6 @@ __version__ = '0.60.2'
 # -----------------------------------------------------------------------------
 # REFERENCES:
 
-
-# === PYTHON 2+3 SUPPORT ======================================================
-
-if sys.version_info[0] >= 3:
-    unichr = chr
 
 # === CONSTANTS ==============================================================
 
@@ -392,13 +386,13 @@ def process_doc_stream(stream):
             # all we do later is check for the ascii-sequence 'DDE' later...
             elif char == 0:        # may be a high-byte of a 2-byte codec
                 # pylint: disable-next=possibly-used-before-assignment
-                field_contents += unichr(char)
+                field_contents += chr(char)
             elif char in (10, 13):
                 field_contents += u'\n'
             elif char < 32:
                 field_contents += u'?'
             elif char < 128:
-                field_contents += unichr(char)
+                field_contents += chr(char)
             else:
                 field_contents += u'?'
 
@@ -781,11 +775,7 @@ def process_csv(filepath):
     Cannot deal with unicode files yet (need more than just use uopen()).
     """
     results = []
-    if sys.version_info.major <= 2:
-        open_arg = dict(mode='rb')
-    else:
-        open_arg = dict(newline='')
-    with open(filepath, **open_arg) as file_handle:
+    with open(filepath, newline='') as file_handle:
         # TODO: here we should not assume this is a file on disk, filepath can be a file object
         results, dialect = process_csv_dialect(file_handle, CSV_DELIMITERS)
         is_small = file_handle.tell() < CSV_SMALL_THRESH

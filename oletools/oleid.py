@@ -42,7 +42,6 @@ http://www.decalage.info/python/oletools
 # POSSIBILITY OF SUCH DAMAGE.
 
 # To improve Python 2+3 compatibility:
-from __future__ import print_function
 #from __future__ import absolute_import
 
 #------------------------------------------------------------------------------

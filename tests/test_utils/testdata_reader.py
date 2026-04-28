@@ -16,20 +16,8 @@ from . import DATA_BASE_DIR
 # Passwort used to encrypt problematic test samples inside a zip container
 ENCRYPTED_FILES_PASSWORD='infected-test'
 
-# import zipfile in a way compatible with all kinds of old python versions
-if sys.version_info[0] <= 2:
-    # Python 2.x
-    if sys.version_info[1] <= 6:
-        # Python 2.6
-        # use is_zipfile backported from Python 2.7:
-        from thirdparty.zipfile27 import is_zipfile
-    else:
-        # Python 2.7
-        from zipfile import is_zipfile
-else:
-    # Python 3.x+
-    from zipfile import is_zipfile
-    ENCRYPTED_FILES_PASSWORD = ENCRYPTED_FILES_PASSWORD.encode()
+from zipfile import is_zipfile
+ENCRYPTED_FILES_PASSWORD = ENCRYPTED_FILES_PASSWORD.encode()
 
 
 def read(relative_path):

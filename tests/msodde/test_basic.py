@@ -6,7 +6,6 @@ Ensure that
 - dde-links are found where appropriate
 """
 
-from __future__ import print_function
 
 import unittest
 from platform import python_implementation

@@ -96,7 +96,6 @@ http://www.decalage.info/python/oletools
 #                        - fixed bug in re_executable_extensions
 # 2021-06-03 v0.60.1 PL: - fixed code to find URLs in OLE2Link objects for Py3 (issue #692)
 
-from __future__ import print_function
 
 __version__ = '0.60.1'
 
@@ -330,20 +329,10 @@ DESTINATION_CONTROL_WORDS = frozenset((
     ))
 
 
-# some str methods on Python 2.x return characters,
-# while the equivalent bytes methods return integers on Python 3.x:
-if sys.version_info[0] <= 2:
-    # Python 2.x - Characters (str)
-    BACKSLASH = '\\'
-    BRACE_OPEN = '{'
-    BRACE_CLOSE = '}'
-    UNICODE_TYPE = unicode   # pylint: disable=undefined-variable
-else:
-    # Python 3.x - Integers
-    BACKSLASH = ord('\\')
-    BRACE_OPEN = ord('{')
-    BRACE_CLOSE = ord('}')
-    UNICODE_TYPE = str
+BACKSLASH = ord('\\')
+BRACE_OPEN = ord('{')
+BRACE_CLOSE = ord('}')
+UNICODE_TYPE = str
 
 RTF_MAGIC = b'\x7b\\rt'   # \x7b == b'{' but does not mess up auto-indent
 

@@ -362,12 +362,7 @@ def decrypt(filename, passwords=None, decrypted_dir=None, **temp_file_args):
             if 'Unrecognized file format' in str(exc):
                 log.debug('Caught exception', exc_info=True)
 
-                # raise different exception without stack trace of original exc
-                if sys.version_info.major == 2:
-                    raise UnsupportedEncryptionError(filename)
-                else:
-                    # this is a syntax error in python 2, so wrap it in exec()
-                    exec('raise UnsupportedEncryptionError(filename) from None')
+                raise UnsupportedEncryptionError(filename) from None
             else:
                 raise
         if not crypto_file.is_encrypted():
