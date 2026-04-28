@@ -1,7 +1,6 @@
 include install.bat
 include INSTALL.txt
 include README.md
-include requirements.txt
 include oletools/README.rst
 include oletools/README.html
 include oletools/LICENSE.txt
