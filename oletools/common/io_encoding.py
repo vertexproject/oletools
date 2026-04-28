@@ -47,18 +47,12 @@ http://www.decalage.info/python/oletools
 # 2018-11-04 v0.54 CH: - first version: ensure_stdout_handles_unicode, uopen
 
 # -- IMPORTS ------------------------------------------------------------------
-from __future__ import print_function
 import sys
 import codecs
 import os
 from locale import getpreferredencoding
 
-PY3 = sys.version_info.major >= 3
-
-if PY3:
-    from builtins import open as builtin_open
-else:
-    from __builtin__ import open as builtin_open    # pylint: disable=import-error
+builtin_open = open
 
 # -- CONSTANTS ----------------------------------------------------------------
 #: encoding to use for redirection if no good encoding can be found
@@ -108,10 +102,7 @@ def ensure_stdout_handles_unicode():
         return
 
     # get output stream object
-    if PY3:
-        output_stream = sys.stdout.buffer
-    else:
-        output_stream = sys.stdout
+    output_stream = sys.stdout.buffer
 
     # determine encoding of sys.stdout
     try:
@@ -189,9 +180,5 @@ def uopen(filename, mode='r', *args, **kwargs):
     if DEBUG:
         print('Opening {} with fallback encoding {}'
               .format(filename, FALLBACK_ENCODING_OPEN))
-    if PY3:
-        return builtin_open(filename, mode, *args,
-                            encoding=FALLBACK_ENCODING_OPEN, **kwargs)
-    else:
-        handle = builtin_open(filename, mode, *args, **kwargs)
-        return codecs.EncodedFile(handle, FALLBACK_ENCODING_OPEN)
+    return builtin_open(filename, mode, *args,
+                        encoding=FALLBACK_ENCODING_OPEN, **kwargs)

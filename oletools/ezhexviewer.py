@@ -74,16 +74,6 @@ if not _parent_dir in sys.path:
 
 import easygui
 
-# === PYTHON 2+3 SUPPORT ======================================================
-
-if sys.version_info[0] >= 3:
-    # Python 3 specific adaptations
-    # py3 range = py2 xrange
-    xrange = range
-    PYTHON3 = True
-else:
-    PYTHON3 = False
-
 def xord(char):
     '''
     workaround for ord() to work on characters from a bytes string with
@@ -108,12 +98,7 @@ def bchr(x):
     :param x: int
     :return: chr(x) as a bytes string
     '''
-    if PYTHON3:
-        # According to the Python 3 documentation, bytes() can be
-        # initialized with an iterable:
-        return bytes([x])
-    else:
-        return chr(x)
+    return bytes([x])
 
 #------------------------------------------------------------------------------
 # The following code (hexdump3 only) is a modified version of the hex dumper
@@ -132,14 +117,10 @@ def hexdump3(src, length=8, startindex=0):
     startindex: index of 1st byte.
     """
     result=[]
-    # pylint: disable-next=possibly-used-before-assignment
-    for i in xrange(0, len(src), length):
+    for i in range(0, len(src), length):
         s = src[i:i+length]
         hexa = ' '.join(["%02X" % xord(x) for x in s])
-        printable = s.translate(FILTER)
-        if PYTHON3:
-            # On Python 3, need to convert printable from bytes to str:
-            printable = printable.decode('latin1')
+        printable = s.translate(FILTER).decode('latin1')
         result.append("%08X   %-*s   %s\n" % (i+startindex, length*3, hexa, printable))
     return ''.join(result)
 

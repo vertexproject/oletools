@@ -79,7 +79,6 @@ https://github.com/unixfreak0037/officeparser
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from __future__ import print_function
 
 #------------------------------------------------------------------------------
 # CHANGELOG:
@@ -347,78 +346,32 @@ from oletools.common import codepages
 from oletools import ftguess
 from oletools.common.log_helper import log_helper
 
-# === PYTHON 2+3 SUPPORT ======================================================
+def byte_ord(x):
+    return x
 
-if sys.version_info[0] <= 2:
-    # Python 2.x
-    PYTHON2 = True
-    # to use ord on bytes/bytearray items the same way in Python 2+3
-    # on Python 2, just use the normal ord() because items are bytes
-    byte_ord = ord
-    #: Default string encoding for the olevba API
-    DEFAULT_API_ENCODING = 'utf8'  # on Python 2: UTF-8 (bytes)
-else:
-    # Python 3.x+
-    PYTHON2 = False
 
-    # to use ord on bytes/bytearray items the same way in Python 2+3
-    # on Python 3, items are int, so just return the item
-    def byte_ord(x):
-        return x
-    # xrange is now called range:
-    xrange = range
-    # unichr does not exist anymore, only chr:
-    unichr = chr
-    # json2ascii also needs "unicode":
-    unicode = str
-    from functools import reduce
-    #: Default string encoding for the olevba API
-    DEFAULT_API_ENCODING = None  # on Python 3: None (unicode)
-    # Python 3.0 - 3.4 support:
-    # From https://gist.github.com/ynkdir/867347/c5e188a4886bc2dd71876c7e069a7b00b6c16c61
-    if sys.version_info < (3, 5):
-        import codecs
-        _backslashreplace_errors = codecs.lookup_error("backslashreplace")
-
-        def backslashreplace_errors(exc):
-            if isinstance(exc, UnicodeDecodeError):
-                u = "".join("\\x{0:02x}".format(c) for c in exc.object[exc.start:exc.end])
-                return u, exc.end
-            return _backslashreplace_errors(exc)
-
-        codecs.register_error("backslashreplace", backslashreplace_errors)
+from functools import reduce
+#: Default string encoding for the olevba API
+DEFAULT_API_ENCODING = None
 
 
 def unicode2str(unicode_string):
     """
-    convert a unicode string to a native str:
-        - on Python 3, it returns the same string
-        - on Python 2, the string is encoded with UTF-8 to a bytes str
     :param unicode_string: unicode string to be converted
-    :return: the string converted to str
+    :return: str (identity on Python 3)
     :rtype: str
     """
-    if PYTHON2:
-        return unicode_string.encode('utf8', errors='replace')
-    else:
-        return unicode_string
+    return unicode_string
 
 
 def bytes2str(bytes_string, encoding='utf8'):
     """
-    convert a bytes string to a native str:
-        - on Python 2, it returns the same string (bytes=str)
-        - on Python 3, the string is decoded using the provided encoding
-          (UTF-8 by default) to a unicode str
     :param bytes_string: bytes string to be converted
     :param encoding: codec to be used for decoding
-    :return: the string converted to str
+    :return: str decoded from bytes
     :rtype: str
     """
-    if PYTHON2:
-        return bytes_string
-    else:
-        return bytes_string.decode(encoding, errors='replace')
+    return bytes_string.decode(encoding, errors='replace')
 
 
 # === LOGGING =================================================================
@@ -1048,10 +1001,7 @@ def vba_chr_tostr(t):
             # TODO: check if it needs to be converted to bytes for Python 3
             return VbaExpressionString(chr(i))
         else:
-            # unicode character
-            # Note: this distinction is only needed for Python 2
-            # pylint: disable-next=possibly-used-before-assignment
-            return VbaExpressionString(unichr(i).encode('utf-8', 'backslashreplace'))
+            return VbaExpressionString(chr(i).encode('utf-8', 'backslashreplace'))
     except ValueError:
         log.exception('ERROR: incorrect parameter value for chr(): %r' % i)
         return VbaExpressionString('Chr(%r)' % i)
@@ -1410,7 +1360,7 @@ def decompress_stream(compressed_container):
                 flag_byte = compressed_container[compressed_current]
                 compressed_current += 1
                 # pylint: disable-next=possibly-used-before-assignment
-                for bit_index in xrange(0, 8):
+                for bit_index in range(0, 8):
                     # log.debug('bit_index=%d / compressed_current=%d / compressed_end=%d' % (bit_index, compressed_current, compressed_end))
                     if compressed_current >= compressed_end:
                         break
@@ -1435,7 +1385,7 @@ def decompress_stream(compressed_container):
                         offset = (temp1 >> temp2) + 1
                         #log.debug('offset=%d length=%d' % (offset, length))
                         copy_source = len(decompressed_container) - offset
-                        for index in xrange(copy_source, copy_source + length):
+                        for index in range(copy_source, copy_source + length):
                             decompressed_container.extend([decompressed_container[index]])
                         compressed_current += 2
     return bytes(decompressed_container)
@@ -2080,7 +2030,7 @@ class VBA_Project(object):
         unused = projectcookierecord_cookie
 
         log.debug("parsing {0} modules".format(self.modules_count))
-        for module_index in xrange(0, self.modules_count):
+        for module_index in range(0, self.modules_count):
             module = VBA_Module(self, self.dir_stream, module_index=module_index)
             self.modules.append(module)
             yield (module.code_path, module.filename_str, module.code_str)
@@ -2425,32 +2375,10 @@ def json2ascii(json_obj, encoding='utf8', errors='replace'):
     elif isinstance(json_obj, (bool, int, float)):
         pass
     elif isinstance(json_obj, str):
-        if PYTHON2:
-            # de-code and re-encode
-            dencoded = json_obj.decode(encoding, errors).encode(encoding, errors)
-            if dencoded != json_obj:
-                log.debug('json2ascii: replaced: {0} (len {1})'
-                         .format(json_obj, len(json_obj)))
-                log.debug('json2ascii:     with: {0} (len {1})'
-                         .format(dencoded, len(dencoded)))
-            return dencoded
-        else:
-            # on Python 3, just keep Unicode strings as-is:
-            return json_obj
-    # pylint: disable-next=possibly-used-before-assignment
-    elif isinstance(json_obj, unicode) and PYTHON2:
-        # On Python 2, encode unicode to bytes:
-        json_obj_bytes = json_obj.encode(encoding, errors)
-        log.debug('json2ascii: encode unicode: {0}'.format(json_obj_bytes))
-        # cannot put original into logger
-        # print 'original: ' json_obj
-        return json_obj_bytes
-    elif isinstance(json_obj, bytes) and not PYTHON2:
-        # On Python 3, decode bytes to unicode str
+        return json_obj
+    elif isinstance(json_obj, bytes):
         json_obj_str = json_obj.decode(encoding, errors)
-        log.debug('json2ascii: encode unicode: {0}'.format(json_obj_str))
-        # cannot put original into logger
-        # print 'original: ' json_obj
+        log.debug('json2ascii: decode bytes: {0}'.format(json_obj_str))
         return json_obj_str
     elif isinstance(json_obj, dict):
         for key in json_obj:
@@ -3044,11 +2972,7 @@ class VBA_Parser(object):
             loosyHeaderRE = re.compile(r'^(From |[\041-\071\073-\176]{1,}:?|[\t ])')
             email.feedparser.headerRE = loosyHeaderRE
             try:
-                if PYTHON2:
-                    mhtml = email.message_from_string(stripped_data)
-                else:
-                    # on Python 3, need to use message_from_bytes instead:
-                    mhtml = email.message_from_bytes(stripped_data)
+                mhtml = email.message_from_bytes(stripped_data)
             finally:
                 email.feedparser.headerRE = oldHeaderRE
             # find all the attached files:
@@ -3329,7 +3253,7 @@ class VBA_Parser(object):
         # Also look for VBA code in any stream including orphans
         # (happens in some malformed files)
         ole = self.ole_file
-        for sid in xrange(len(ole.direntries)):
+        for sid in range(len(ole.direntries)):
             # check if id is already done above:
             log.debug('Checking DirEntry #%d' % sid)
             d = ole.direntries[sid]
@@ -3558,7 +3482,7 @@ class VBA_Parser(object):
             # Also look for VBA code in any stream including orphans
             # (happens in some malformed files)
             ole = self.ole_file
-            for sid in xrange(len(ole.direntries)):
+            for sid in range(len(ole.direntries)):
                 # check if id is already done above:
                 log.debug('Checking DirEntry #%d' % sid)
                 if sid in vba_stream_ids:
@@ -3825,11 +3749,7 @@ class VBA_Parser(object):
                 # Extract printable strings from the form object stream "o":
                 for m in re_printable_string.finditer(form_data):
                     log.debug('Printable string found in form: %r' % m.group())
-                    # On Python 3, convert bytes string to unicode str:
-                    if PYTHON2:
-                        found_str = m.group()
-                    else:
-                        found_str = m.group().decode('utf8', errors='replace')
+                    found_str = m.group().decode('utf8', errors='replace')
                     if found_str != 'Tahoma':
                         yield (self.filename, '/'.join(o_stream), found_str)
 
@@ -3887,12 +3807,7 @@ class VBA_Parser(object):
             # we can process the results later on.
             # save sys.stdout, then modify it to capture pcodedmp's output:
             # stdout = sys.stdout
-            if PYTHON2:
-                # on Python 2, console output is bytes
-                output = BytesIO()
-            else:
-                # on Python 3, console output is unicode
-                output = StringIO()
+            output = StringIO()
             # sys.stdout = output
             # we need to fake an argparser for those two args used by pcodedmp:
             class args:

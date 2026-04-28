@@ -68,11 +68,6 @@ del PARENT_DIR
 from oletools import record_base
 
 
-# === PYTHON 2+3 SUPPORT ======================================================
-
-if sys.version_info[0] >= 3:
-    unichr = chr
-
 ###############################################################################
 # Helpers
 ###############################################################################
@@ -119,10 +114,10 @@ def read_unicode_2byte(data, start_idx, n_chars):
     """ read a unicode string with characters encoded by 2 bytes """
     end_idx = start_idx + n_chars * 2
     if n_chars < 256:  # faster version, long format string for unpack
-        unichars = (unichr(val) for val in
+        unichars = (chr(val) for val in
                     unpack('<' + 'H'*n_chars, data[start_idx:end_idx]))
     else:              # slower version but less memory-extensive
-        unichars = (unichr(unpack('<H', data[data_idx:data_idx+2])[0])
+        unichars = (chr(unpack('<H', data[data_idx:data_idx+2])[0])
                     for data_idx in range(start_idx, end_idx, 2))
     return u''.join(unichars), end_idx
 

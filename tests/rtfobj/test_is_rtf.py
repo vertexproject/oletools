@@ -1,6 +1,5 @@
 """ Test rtfobj.is_rtf """
 
-from __future__ import print_function
 
 import unittest
 from os.path import join

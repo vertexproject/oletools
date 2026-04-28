@@ -65,7 +65,6 @@ Use as follows:
 # TODO:
 
 
-from __future__ import print_function
 from ._json_formatter import JsonFormatter
 from ._logger_adapter import OletoolsLoggerAdapter
 from . import _root_logger_wrapper

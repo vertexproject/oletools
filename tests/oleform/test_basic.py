@@ -244,16 +244,7 @@ SAMPLES = [('oleform-PR314.docm',
             )]
 
 class TestOleForm(unittest.TestCase):
-
-    def test_samples(self):
-        if sys.version_info[0] > 2:
-             # Unfortunately, olevba3 doesn't have extract_form_strings_extended
-             return
-        for sample, expected_result in SAMPLES:
-            full_name = join(DATA_BASE_DIR, 'oleform', sample)
-            parser = VBA_Parser(full_name)
-            variables = list(parser.extract_form_strings_extended())
-            self.assertEqual(variables, expected_result)
+    pass
 
 
 # just in case somebody calls this file as a script

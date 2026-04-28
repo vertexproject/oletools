@@ -1,6 +1,5 @@
 """Test common.ensure_stdout_handles_unicode"""
 
-from __future__ import print_function
 
 import unittest
 import sys
@@ -159,11 +158,7 @@ def run_read(filename):
     #     raise ValueError('Reader has become a tty!')
 
     # compare text
-    if sys.version_info.major <= 2:      # in python2 get encoded byte string
-        expect = FILE_TEXT.encode('utf8')
-    else:                                # python3: should get real unicode
-        expect = FILE_TEXT
-    if text != expect:
+    if text != FILE_TEXT:
         raise ValueError('Wrong contents: {!r} != {!r}'
                          .format(text, expect))
     return 0

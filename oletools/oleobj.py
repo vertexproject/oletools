@@ -41,7 +41,6 @@ http://www.decalage.info/python/oletools
 
 # -- IMPORTS ------------------------------------------------------------------
 
-from __future__ import print_function
 
 import logging
 import struct
@@ -173,15 +172,7 @@ def enable_logging():
 
 # === CONSTANTS ===============================================================
 
-# some str methods on Python 2.x return characters,
-# while the equivalent bytes methods return integers on Python 3.x:
-if sys.version_info[0] <= 2:
-    # Python 2.x
-    NULL_CHAR = '\x00'
-else:
-    # Python 3.x
-    NULL_CHAR = 0
-    xrange = range    # pylint: disable=redefined-builtin, invalid-name
+NULL_CHAR = 0
 
 OOXML_RELATIONSHIP_TAG = '{http://schemas.openxmlformats.org/package/2006/relationships}Relationship'
 # There are several customUI tags for different versions of Office:
@@ -332,8 +323,7 @@ def read_zero_terminated_string(data, index):
     """
     if index is None:
         result = bytearray()
-        # pylint: disable-next=possibly-used-before-assignment
-        for _ in xrange(STR_MAX_LEN):
+        for _ in range(STR_MAX_LEN):
             char = ord(data.read(1))    # need ord() for py3
             if char == 0:
                 return guess_encoding(result), index
