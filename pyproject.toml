@@ -1,0 +1,87 @@
+[build-system]
+requires = ['setuptools>=68.0.0', 'wheel']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'vtx-oletools'
+version = '1.0.0'
+description = "Python tools to analyze security characteristics of MS Office and OLE files (also called Structured Storage, Compound File Binary Format or Compound Document File Format), for Malware Analysis and Incident Response #DFIR"
+readme = 'README.md'
+authors = [
+    {name = 'Philippe Lagadec', email = 'nospam@decalage.info'},
+]
+license = {text = 'BSD'}
+requires-python = '>=3.11'
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: System Administrators',
+    'License :: OSI Approved :: BSD License',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Programming Language :: Python :: 3.14',
+    'Topic :: Security',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+]
+dependencies = [
+    'pyparsing>=2.1.0,<3',
+    'olefile>=0.46',
+    'easygui',
+    'colorclass',
+    'msoffcrypto-tool',
+]
+
+[project.optional-dependencies]
+full = ['XLMMacroDeobfuscator']
+
+[project.urls]
+Homepage = 'https://github.com/vertexproject/oletools'
+Upstream = 'https://github.com/decalage2/oletools'
+
+[project.scripts]
+ezhexviewer = 'oletools.ezhexviewer:main'
+ftguess = 'oletools.ftguess:main'
+mraptor = 'oletools.mraptor:main'
+msodde = 'oletools.msodde:main'
+olebrowse = 'oletools.olebrowse:main'
+oledir = 'oletools.oledir:main'
+oleid = 'oletools.oleid:main'
+olemap = 'oletools.olemap:main'
+olemeta = 'oletools.olemeta:main'
+oletimes = 'oletools.oletimes:main'
+olevba = 'oletools.olevba:main'
+rtfobj = 'oletools.rtfobj:main'
+oleobj = 'oletools.oleobj:main'
+olefile = 'olefile.olefile:main'
+
+[tool.setuptools]
+include-package-data = true
+packages = [
+    'oletools',
+    'oletools.common',
+    'oletools.common.log_helper',
+    'oletools.thirdparty',
+    'oletools.thirdparty.prettytable',
+    'oletools.thirdparty.xglob',
+    'oletools.thirdparty.tablestream',
+    'oletools.thirdparty.oledump',
+]
+
+[tool.setuptools.package-data]
+'oletools' = [
+    'README.rst',
+    'README.html',
+    'LICENSE.txt',
+    'doc/**/*.html',
+    'doc/**/*.md',
+    'doc/**/*.png',
+]
+'oletools.thirdparty.xglob' = ['LICENSE.txt']
+'oletools.thirdparty.prettytable' = ['CHANGELOG', 'COPYING', 'README']
