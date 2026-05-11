@@ -8,8 +8,8 @@ version = '1.0.0'
 description = "Python tools to analyze security characteristics of MS Office and OLE files (also called Structured Storage, Compound File Binary Format or Compound Document File Format), for Malware Analysis and Incident Response #DFIR"
 readme = 'README.md'
 authors = [
-    {name = 'Philippe Lagadec', email = 'nospam@decalage.info'},
     {name = 'The Vertex Project LLC', email = 'root@vertex.link'},
+    {name = 'Philippe Lagadec', email = 'nospam@decalage.info'},
 ]
 license = 'BSD-2-Clause'
 license-files = ['LICENSE']
@@ -44,7 +44,8 @@ full = ['XLMMacroDeobfuscator']
 release = ['bumpversion']
 
 [project.urls]
-Homepage = 'https://github.com/vertexproject/oletools'
+Homepage = 'https://vertex.link'
+Repository = 'https://github.com/vertexproject/oletools'
 Upstream = 'https://github.com/decalage2/oletools'
 
 [project.scripts]

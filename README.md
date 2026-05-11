@@ -1,8 +1,19 @@
+vtx-oletools (Vertex Project Fork)
+===================================
+
+> **This is the Vertex Project fork of [python-oletools](https://github.com/decalage2/oletools),
+> published as `vtx-oletools` on PyPI. The following changes have been made relative to upstream:**
+>
+> - Removed the `xxxswf` third-party component (non-BSD license)
+> - Removed the `pcodedmp` runtime dependency (non-BSD license)
+> - Dropped Python 2 support; requires Python 3.11+
+>
+> The upstream project is maintained by Philippe Lagadec at
+> [decalage2/oletools](https://github.com/decalage2/oletools).
+
 python-oletools
 ===============
-[![PyPI](https://img.shields.io/pypi/v/oletools.svg)](https://pypi.org/project/oletools/)
-[![Build Status](https://travis-ci.org/decalage2/oletools.svg?branch=master)](https://travis-ci.org/decalage2/oletools)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/decalage2)
+[![PyPI](https://img.shields.io/pypi/v/vtx-oletools.svg)](https://pypi.org/project/vtx-oletools/)
 
 [oletools](http://www.decalage.info/python/oletools) is a package of python tools to analyze
 [Microsoft OLE2 files](http://en.wikipedia.org/wiki/Compound_File_Binary_Format) 
