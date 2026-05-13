@@ -88,6 +88,3 @@ packages = [
 ]
 'oletools.thirdparty.xglob' = ['LICENSE.txt']
 'oletools.thirdparty.prettytable' = ['CHANGELOG', 'COPYING', 'README']
-
-[tool.cibuildwheel]
-test-command = [ 'python -c "import oletools; print(oletools.__version__)"' ]
