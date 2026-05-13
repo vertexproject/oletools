@@ -160,7 +160,7 @@ commands:
           command: |
             mkdir -p /tmp/whltest
             python3 -m venv /tmp/whltest/venv
-            cp wheelhouse/*.tar.gz /tmp/whltest
+            cp wheelhouse/*.whl /tmp/whltest
             cd /tmp/whltest
             . ./venv/bin/activate
             python3 -m pip install -U pip twine setuptools
