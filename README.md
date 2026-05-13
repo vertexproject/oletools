@@ -1,8 +1,13 @@
+vtx-oletools (Vertex Project Fork)
+===================================
+
+> This is the Vertex Project fork of [python-oletools](https://github.com/decalage2/oletools),
+> published as `vtx-oletools` on PyPI. The upstream project is maintained by Philippe Lagadec at
+> [decalage2/oletools](https://github.com/decalage2/oletools).
+
 python-oletools
 ===============
-[![PyPI](https://img.shields.io/pypi/v/oletools.svg)](https://pypi.org/project/oletools/)
-[![Build Status](https://travis-ci.org/decalage2/oletools.svg?branch=master)](https://travis-ci.org/decalage2/oletools)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/decalage2)
+[![PyPI](https://img.shields.io/pypi/v/vtx-oletools.svg)](https://pypi.org/project/vtx-oletools/)
 
 [oletools](http://www.decalage.info/python/oletools) is a package of python tools to analyze
 [Microsoft OLE2 files](http://en.wikipedia.org/wiki/Compound_File_Binary_Format) 
@@ -33,6 +38,11 @@ Note: python-oletools is not related to OLETools published by BeCubed Software.
 News
 ----
 
+- **2026-05-13 v1.0.0** (Vertex Project fork):
+    - Removed `xxxswf` third-party component (non-BSD license) ([PR #1](https://github.com/vertexproject/oletools/pull/1))
+    - Removed `pcodedmp` runtime dependency (non-BSD license) ([PR #1](https://github.com/vertexproject/oletools/pull/1))
+    - Dropped Python 2 support; requires Python 3.11+ ([PR #2](https://github.com/vertexproject/oletools/pull/2))
+    - Release prep: LICENSE, pyproject.toml, bumpversion ([PR #3](https://github.com/vertexproject/oletools/pull/3))
 - **2025-05-22 v0.60.3**:
     - olevba: 
       - fixed a security issue in the CLI display when ANSI escape codes are present (PR #873)
