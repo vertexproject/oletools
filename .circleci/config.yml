@@ -153,7 +153,21 @@ commands:
           name: create packages
           command: |
             . venv/bin/activate
-            cibuildwheel
+            python -m build --wheel --outdir ./wheelhouse
+
+      - run:
+          name: smoke packages
+          command: |
+            mkdir -p /tmp/whltest
+            python3 -m venv /tmp/whltest/venv
+            cp wheelhouse/*.whl /tmp/whltest
+            cd /tmp/whltest
+            . ./venv/bin/activate
+            python3 -m pip install -U pip twine setuptools
+            python3 -m twine check *.whl
+            python3 -m pip install *.whl
+            python3 -c "$PYPI_SMOKE_CODE"
+            deactivate
 
   deploy_pypi_upload:
     description: "Upload packages to pypi"
@@ -185,12 +199,12 @@ jobs:
     steps:
       - test_steps_python
 
-  deploy_pypi_linux:
+  deploy_pypi:
 
     docker:
       - image: cimg/python:3.13
         environment:
-          PYPI_SMOKE_CODE: import oletools
+          PYPI_SMOKE_CODE: import oletools; print(oletools.__version__)
 
     steps:
       - setup_remote_docker
@@ -244,7 +258,7 @@ workflows:
             branches:
               only: /.*/
 
-      - deploy_pypi_linux:
+      - deploy_pypi:
           requires:
             - python311
             - python312
